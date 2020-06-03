@@ -1,10 +1,9 @@
 /*
- * Copyright (C) 2007-2019 Crafter Software Corporation. All Rights Reserved.
+ * Copyright (C) 2007-2020 Crafter Software Corporation. All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * it under the terms of the GNU General Public License version 3 as published by
+ * the Free Software Foundation.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -19,10 +18,9 @@ package org.craftercms.commons.config.profiles.aws;
 import org.apache.commons.configuration2.HierarchicalConfiguration;
 import org.apache.commons.configuration2.tree.ImmutableNode;
 import org.craftercms.commons.config.ConfigurationException;
-import org.craftercms.commons.config.EncryptionAwareConfigurationReader;
+import org.craftercms.commons.config.ConfigurationResolver;
 
-import static org.craftercms.commons.config.ConfigUtils.getBooleanProperty;
-import static org.craftercms.commons.config.ConfigUtils.getRequiredStringProperty;
+import static org.craftercms.commons.config.ConfigUtils.*;
 
 /**
  * Configuration mapper for {@link S3Profile}s.
@@ -36,15 +34,15 @@ public class S3ProfileMapper extends AbstractAwsProfileMapper<S3Profile> {
     private static final String CONFIG_KEY_BUCKET = "bucketName";
     private static final String CONFIG_KEY_PATH_STYLE = "pathStyleAccess";
 
-    public S3ProfileMapper(final EncryptionAwareConfigurationReader configurationReader) {
-        super(CONFIG_KEY_S3, configurationReader);
+    public S3ProfileMapper(ConfigurationResolver configurationResolver) {
+        super(CONFIG_KEY_S3, configurationResolver);
     }
 
     @Override
     protected S3Profile mapProfile(HierarchicalConfiguration<ImmutableNode> profileConfig)
             throws ConfigurationException {
         S3Profile profile = super.mapProfile(profileConfig);
-        profile.setBucketName(getRequiredStringProperty(profileConfig, CONFIG_KEY_BUCKET));
+        profile.setBucketName(getStringProperty(profileConfig, CONFIG_KEY_BUCKET));
         profile.setPathStyleAccessEnabled(getBooleanProperty(profileConfig, CONFIG_KEY_PATH_STYLE, false));
 
         return profile;

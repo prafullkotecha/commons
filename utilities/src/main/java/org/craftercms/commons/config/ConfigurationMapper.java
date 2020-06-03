@@ -1,10 +1,9 @@
 /*
- * Copyright (C) 2007-2019 Crafter Software Corporation. All Rights Reserved.
+ * Copyright (C) 2007-2020 Crafter Software Corporation. All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * it under the terms of the GNU General Public License version 3 as published by
+ * the Free Software Foundation.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -16,7 +15,8 @@
  */
 package org.craftercms.commons.config;
 
-import java.io.InputStream;
+import org.apache.commons.configuration2.HierarchicalConfiguration;
+import org.apache.commons.configuration2.tree.ImmutableNode;
 
 /**
  * Interface for classes that map configuration data to Java bean classes.
@@ -29,7 +29,7 @@ public interface ConfigurationMapper<T> {
      * Reads the configuration from the specified input stream, extracts the specific sub-configuration identified by
      * {@code configId} and maps the configuration to a Java bean.
      *
-     * @param inputStream the IS of the configuration file
+     * @param provider the provider to read the configuration file
      * @param encoding the charset encoding of the configuration file
      * @param configId the ID of the specific sub-configuration to map
      *
@@ -37,6 +37,18 @@ public interface ConfigurationMapper<T> {
      *
      * @throws ConfigurationException if an error occurs
      */
-    T readConfig(InputStream inputStream, String encoding, String configId) throws ConfigurationException;
+    T readConfig(ConfigurationProvider provider, String module, String path, String encoding, String configId)
+            throws ConfigurationException;
+
+    /**
+     * Reads a single profile from the given configuration
+     *
+     * @param config the profile configuration
+     *
+     * @return the configuration object
+     *
+     * @throws ConfigurationException if an error occurs
+     */
+    T processConfig(HierarchicalConfiguration<ImmutableNode> config) throws ConfigurationException;
 
 }

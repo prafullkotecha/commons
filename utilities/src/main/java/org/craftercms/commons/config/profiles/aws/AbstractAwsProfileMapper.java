@@ -1,10 +1,9 @@
 /*
- * Copyright (C) 2007-2019 Crafter Software Corporation. All Rights Reserved.
+ * Copyright (C) 2007-2020 Crafter Software Corporation. All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * it under the terms of the GNU General Public License version 3 as published by
+ * the Free Software Foundation.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -20,7 +19,7 @@ import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import org.apache.commons.configuration2.HierarchicalConfiguration;
 import org.apache.commons.configuration2.tree.ImmutableNode;
-import org.craftercms.commons.config.EncryptionAwareConfigurationReader;
+import org.craftercms.commons.config.ConfigurationResolver;
 import org.craftercms.commons.config.profiles.AbstractProfileConfigMapper;
 import org.craftercms.commons.config.ConfigurationException;
 
@@ -39,9 +38,8 @@ public abstract class AbstractAwsProfileMapper<T extends AbstractAwsProfile> ext
     private static final String CONFIG_KEY_SECRET_KEY = "credentials.secretKey";
     private static final String CONFIG_KEY_ENDPOINT = "endpoint";
 
-    public AbstractAwsProfileMapper(final String serviceName,
-                                    final EncryptionAwareConfigurationReader configurationReader) {
-        super(serviceName, configurationReader);
+    public AbstractAwsProfileMapper(String serviceName, ConfigurationResolver configurationResolver) {
+        super(serviceName, configurationResolver);
     }
 
     @Override

@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright (C) 2007-2019 Crafter Software Corporation. All Rights Reserved.
+  ~ Copyright (C) 2007-2020 Crafter Software Corporation. All Rights Reserved.
   ~
   ~ This program is free software: you can redistribute it and/or modify
-  ~ it under the terms of the GNU General Public License as published by
-  ~ the Free Software Foundation, either version 3 of the License, or
-  ~ (at your option) any later version.
+  ~ it under the terms of the GNU General Public License version 3 as published by
+  ~ the Free Software Foundation.
   ~
   ~ This program is distributed in the hope that it will be useful,
   ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -22,7 +21,7 @@
     <parent>
         <artifactId>crafter-commons</artifactId>
         <groupId>org.craftercms</groupId>
-        <version>3.1.5</version><!-- craftercms version flag -->
+        <version>3.1.8-SNAPSHOT</version><!-- craftercms version flag -->
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -243,7 +242,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-shade-plugin</artifactId>
-                        <version>3.0.0</version>
+                        <version>3.2.2</version>
                         <executions>
                             <execution>
                                 <phase>package</phase>
@@ -264,16 +263,15 @@
                                         <filter>
                                             <artifact>*:*</artifact>
                                             <excludes>
-                                                <exclude>META-INF/*.SF</exclude>
-                                                <exclude>META-INF/*.DSA</exclude>
-                                                <exclude>META-INF/*.RSA</exclude>
+                                                <exclude>META-INF/**</exclude>
+                                                <exclude>module-info.class</exclude>
                                             </excludes>
                                         </filter>
                                         <filter>
                                             <artifact>org.aspectj:aspectjweaver</artifact>
                                             <excludes>
                                                 <exclude>org/aspectj/lang/annotation/Aspect.class</exclude>
-                                                <exclude> org/aspectj/lang/JoinPoint$StaticPart.class</exclude>
+                                                <exclude>org/aspectj/lang/JoinPoint$StaticPart.class</exclude>
                                                 <exclude>org/aspectj/runtime/internal/AroundClosure.class</exclude>
                                                 <exclude>org/aspectj/lang/ProceedingJoinPoint.class</exclude>
                                                 <exclude>org/aspectj/lang/Signature.class</exclude>

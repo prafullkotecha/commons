@@ -1,10 +1,9 @@
 /*
- * Copyright (C) 2007-2019 Crafter Software Corporation. All Rights Reserved.
+ * Copyright (C) 2007-2020 Crafter Software Corporation. All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * it under the terms of the GNU General Public License version 3 as published by
+ * the Free Software Foundation.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -18,11 +17,8 @@ package org.craftercms.commons.config.profiles;
 
 import org.apache.commons.configuration2.HierarchicalConfiguration;
 import org.apache.commons.configuration2.tree.ImmutableNode;
-import org.craftercms.commons.config.ConfigurationException;
-import org.craftercms.commons.config.ConfigurationMapper;
-import org.craftercms.commons.config.EncryptionAwareConfigurationReader;
+import org.craftercms.commons.config.*;
 
-import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -37,19 +33,20 @@ public abstract class AbstractProfileConfigMapper<T extends ConfigurationProfile
 
     protected String serviceName;
 
-    protected EncryptionAwareConfigurationReader configurationReader;
+    protected ConfigurationResolver configurationResolver;
 
-    public AbstractProfileConfigMapper(final String serviceName,
-                                       final EncryptionAwareConfigurationReader configurationReader) {
+    public AbstractProfileConfigMapper(String serviceName, ConfigurationResolver configurationResolver) {
         this.serviceName = serviceName;
-        this.configurationReader = configurationReader;
+        this.configurationResolver = configurationResolver;
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public T readConfig(InputStream inputStream, String encoding, String profileId) throws ConfigurationException {
+    public T readConfig(ConfigurationProvider provider, String module, String path, String encoding, String profileId)
+            throws ConfigurationException {
         HierarchicalConfiguration<ImmutableNode> config =
-            (HierarchicalConfiguration<ImmutableNode>) configurationReader.readXmlConfiguration(inputStream, encoding);
+                (HierarchicalConfiguration<ImmutableNode>)
+                        configurationResolver.getXmlConfiguration(module, path, provider);
 
         List<HierarchicalConfiguration<ImmutableNode>> profiles =
             config.configurationsAt(serviceName + "." + CONFIG_KEY_PROFILE);
@@ -59,10 +56,14 @@ public abstract class AbstractProfileConfigMapper<T extends ConfigurationProfile
                 .findFirst()
                 .orElseThrow(() -> new ConfigurationException("Profile '" + profileId + "' not found"));
 
-        T profile = mapProfile(profileConfig);
+        T profile = processConfig(profileConfig);
         profile.setProfileId(profileId);
-
         return profile;
+    }
+
+    @Override
+    public T processConfig(HierarchicalConfiguration<ImmutableNode> config) throws ConfigurationException {
+        return mapProfile(config);
     }
 
     protected abstract T mapProfile(HierarchicalConfiguration<ImmutableNode> profileConfig) throws ConfigurationException;
